@@ -14,4 +14,5 @@ func main() {
 	client := twitter.New(os.Getenv(constants.OAUTH_TOKEN), os.Getenv(constants.OAUTH_TOKEN_SECRET))
 	client.Initialize()
 	client.Test()
+	client.PostTweet("posted from golang - works fine :)")
 }

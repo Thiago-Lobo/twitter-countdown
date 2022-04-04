@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/michimani/gotwi"
-	// "github.com/michimani/gotwi/tweets"
-	// "github.com/michimani/gotwi/tweets/types"
+	"github.com/michimani/gotwi/tweets"
+	tt "github.com/michimani/gotwi/tweets/types"
 	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/users"
-	"github.com/michimani/gotwi/users/types"
+	ut "github.com/michimani/gotwi/users/types"
 )
 
 type TwitterClient struct {
@@ -51,7 +51,7 @@ func (tc *TwitterClient) Initialize() {
 
 func (tc *TwitterClient) Test() {
 
-	p := &types.UserLookupByUsernameParams{
+	p := &ut.UserLookupByUsernameParams{
 		Username: "elonmusk",
 		Expansions: fields.ExpansionList{
 			fields.ExpansionPinnedTweetID,
@@ -82,37 +82,16 @@ func (tc *TwitterClient) Test() {
 	}
 }
 
-// func main() {
-// 	in := &gotwi.NewGotwiClientInput{
-// 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
-// 		OAuthToken:           "your-twitter-acount-oauth-token",
-// 		OAuthTokenSecret:     "your-twitter-acount-oauth-token-secret",
-// 	}
+func (tc *TwitterClient) PostTweet(text string) {
+	p := &tt.ManageTweetsPostParams{
+		Text: gotwi.String(text),
+	}
 
-// 	c, err := gotwi.NewGotwiClient(in)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		return
-// 	}
+	res, err := tweets.ManageTweetsPost(context.Background(), tc.Client, p)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 
-// 	p := &types.ManageTweetsPostParams{
-// 		Text: gotwi.String("This is a test tweet with poll."),
-// 		Poll: &types.ManageTweetsPostParamsPoll{
-// 			DurationMinutes: gotwi.Int(5),
-// 			Options: []string{
-// 				"Cyan",
-// 				"Magenta",
-// 				"Yellow",
-// 				"Key plate",
-// 			},
-// 		},
-// 	}
-
-// 	res, err := tweets.ManageTweetsPost(context.Background(), c, p)
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 		return
-// 	}
-
-// 	fmt.Printf("[%s] %s\n", gotwi.StringValue(res.Data.ID), gotwi.StringValue(res.Data.Text))
-// }
+	fmt.Printf("Posted tweet: [%s] %s\n", gotwi.StringValue(res.Data.ID), gotwi.StringValue(res.Data.Text))
+}
