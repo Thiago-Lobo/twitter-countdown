@@ -55,33 +55,17 @@ func (tc *TwitterClient) Test() {
 
 	p := &ut.UserLookupByUsernameParams{
 		Username: "elonmusk",
-		Expansions: fields.ExpansionList{
-			fields.ExpansionPinnedTweetID,
-		},
-		UserFields: fields.UserFieldList{
-			fields.UserFieldCreatedAt,
-		},
-		TweetFields: fields.TweetFieldList{
-			fields.TweetFieldCreatedAt,
-		},
 	}
 
-	u, err := users.UserLookupByUsername(context.Background(), tc.Client, p)
+	
+	res, err := users.UserLookupByUsername(context.Background(), tc.Client, p)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		return
 	}
 
-	fmt.Println("ID: ", gotwi.StringValue(u.Data.ID))
-	fmt.Println("Name: ", gotwi.StringValue(u.Data.Name))
-	fmt.Println("Username: ", gotwi.StringValue(u.Data.Username))
-	fmt.Println("CreatedAt: ", u.Data.CreatedAt)
+	fmt.Printf("TEST: [elonmusk]'s user ID is [%s]\n", *res.Data.ID)
 
-	if u.Includes.Tweets != nil {
-		for _, t := range u.Includes.Tweets {
-			fmt.Println("PinnedTweet: ", gotwi.StringValue(t.Text))
-		}
-	}
 }
 
 func (tc *TwitterClient) PostTweet(text string) {
@@ -100,9 +84,7 @@ func (tc *TwitterClient) PostTweet(text string) {
 
 func (tc *TwitterClient) LookupAuthenticatedUserInfo() string {
 	
-	p := &ut.UserLookupMeParams{
-		
-	}
+	p := &ut.UserLookupMeParams{}
 
 	res, err := users.UserLookupMe(context.Background(), tc.Client, p)
 	if err != nil {
@@ -115,14 +97,13 @@ func (tc *TwitterClient) LookupAuthenticatedUserInfo() string {
 	return *res.Data.ID
 }
 
-func (tc *TwitterClient) LookupRecentTweets(username string, maxResults int) {
+func (tc *TwitterClient) LookupRecentTweets(query string) {
 	
 	p := &types.SearchTweetsRecentParams{
-		Query: "from:elonmusk",
+		Query: query,
 		TweetFields: fields.TweetFieldList{
 			fields.TweetFieldText,
 		},
-		MaxResults: 1,
 	}
 
 	res, err := tweets.SearchTweetsRecent(context.Background(), tc.Client, p)
