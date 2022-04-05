@@ -8,7 +8,6 @@ import (
 	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/resources"
 	"github.com/michimani/gotwi/tweets"
-	"github.com/michimani/gotwi/tweets/types"
 	tt "github.com/michimani/gotwi/tweets/types"
 	"github.com/michimani/gotwi/users"
 	ut "github.com/michimani/gotwi/users/types"
@@ -100,7 +99,7 @@ func (tc *TwitterClient) LookupAuthenticatedUserInfo() string {
 
 func (tc *TwitterClient) LookupRecentTweets(query string) []resources.Tweet {
 	
-	p := &types.SearchTweetsRecentParams{
+	p := &tt.SearchTweetsRecentParams{
 		Query: query,
 		TweetFields: fields.TweetFieldList{
 			fields.TweetFieldText,

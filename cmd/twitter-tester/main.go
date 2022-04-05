@@ -22,6 +22,8 @@ func main() {
 
 	fmt.Println(logic.GetDaysToEvent("2023-01-01"))
 	fmt.Println(logic.GetDaysToEvent("2022-04-04"))
+	fmt.Println(logic.GetDaysToEvent("2022-04-05"))
+	fmt.Println(logic.GetDaysToEvent("2022-04-06"))
 
 	client := twitter.New(os.Getenv(constants.OAUTH_TOKEN), os.Getenv(constants.OAUTH_TOKEN_SECRET))
 	client.Initialize()
