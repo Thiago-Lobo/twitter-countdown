@@ -3,10 +3,12 @@ package twitter
 import (
 	"context"
 	"fmt"
+
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/tweets"
-	tt "github.com/michimani/gotwi/tweets/types"
 	"github.com/michimani/gotwi/fields"
+	"github.com/michimani/gotwi/tweets"
+	"github.com/michimani/gotwi/tweets/types"
+	tt "github.com/michimani/gotwi/tweets/types"
 	"github.com/michimani/gotwi/users"
 	ut "github.com/michimani/gotwi/users/types"
 )
@@ -94,4 +96,44 @@ func (tc *TwitterClient) PostTweet(text string) {
 	}
 
 	fmt.Printf("Posted tweet: [%s] %s\n", gotwi.StringValue(res.Data.ID), gotwi.StringValue(res.Data.Text))
+}
+
+func (tc *TwitterClient) LookupAuthenticatedUserInfo() string {
+	
+	p := &ut.UserLookupMeParams{
+		
+	}
+
+	res, err := users.UserLookupMe(context.Background(), tc.Client, p)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ""
+	}
+
+	fmt.Printf("Authenticated user's ID is [%s]\n", gotwi.StringValue(res.Data.ID))
+	
+	return *res.Data.ID
+}
+
+func (tc *TwitterClient) LookupRecentTweets(username string, maxResults int) {
+	
+	p := &types.SearchTweetsRecentParams{
+		Query: "from:elonmusk",
+		TweetFields: fields.TweetFieldList{
+			fields.TweetFieldText,
+		},
+		MaxResults: 1,
+	}
+
+	res, err := tweets.SearchTweetsRecent(context.Background(), tc.Client, p)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	for _, t := range res.Data {
+		fmt.Printf("Found tweet: [%s]\n", gotwi.StringValue(t.Text))
+	}
+
+
 }
