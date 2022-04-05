@@ -6,6 +6,7 @@ import (
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/fields"
+	"github.com/michimani/gotwi/resources"
 	"github.com/michimani/gotwi/tweets"
 	"github.com/michimani/gotwi/tweets/types"
 	tt "github.com/michimani/gotwi/tweets/types"
@@ -97,7 +98,7 @@ func (tc *TwitterClient) LookupAuthenticatedUserInfo() string {
 	return *res.Data.ID
 }
 
-func (tc *TwitterClient) LookupRecentTweets(query string) {
+func (tc *TwitterClient) LookupRecentTweets(query string) []resources.Tweet {
 	
 	p := &types.SearchTweetsRecentParams{
 		Query: query,
@@ -109,12 +110,9 @@ func (tc *TwitterClient) LookupRecentTweets(query string) {
 	res, err := tweets.SearchTweetsRecent(context.Background(), tc.Client, p)
 	if err != nil {
 		fmt.Println(err.Error())
-		return
+		return nil
 	}
 
-	for _, t := range res.Data {
-		fmt.Printf("Found tweet: [%s]\n", gotwi.StringValue(t.Text))
-	}
-
+	return res.Data
 
 }
