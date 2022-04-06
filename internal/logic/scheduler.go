@@ -6,7 +6,7 @@ import (
 
 type fn func() bool
 
-func ScheduleTask(theTask fn, thresholdTime time.Time, period time.Duration, runAtStart bool) {
+func ScheduleTask(theTask fn, period time.Duration, runAtStart bool) {
 	done := make(chan bool)
 
 	taskClosure := func () {	
