@@ -14,7 +14,7 @@ func stripRegex(in string) string {
 func BuildSubQueryFromTweetTemplate(tweetTemplate string) string {
 	tweetTemplate = stripRegex(tweetTemplate)
 	tokens := strings.Fields(tweetTemplate)
-	result := strings.Join(tokens[:], " AND ")
+	result := strings.Join(tokens[:], " ")
 
 	return fmt.Sprintf("(%s)", result)
 }

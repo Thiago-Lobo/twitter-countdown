@@ -13,6 +13,6 @@ func init() {
 
 func main() {
 
-	logic.Initialize(os.Getenv(constants.OAUTH_TOKEN), os.Getenv(constants.OAUTH_TOKEN_SECRET), os.Args[1], "2023-01-01", "15:40:00")
+	logic.Initialize(os.Getenv(constants.OAUTH_TOKEN), os.Getenv(constants.OAUTH_TOKEN_SECRET), os.Getenv(constants.TWEET_TEMPLATE), os.Getenv(constants.END_DATE), os.Getenv(constants.POST_TIME))
 
 }

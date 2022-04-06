@@ -3,6 +3,7 @@ package twitter
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/fields"
@@ -103,6 +104,31 @@ func (tc *TwitterClient) LookupRecentTweets(query string) []resources.Tweet {
 		Query: query,
 		TweetFields: fields.TweetFieldList{
 			fields.TweetFieldText,
+			fields.TweetFieldCreatedAt,
+		},
+	}
+
+	res, err := tweets.SearchTweetsRecent(context.Background(), tc.Client, p)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+
+	return res.Data
+
+}
+
+func (tc *TwitterClient) LookupRecentTweetsWithTimeRange(query string, startTime time.Time, endTime time.Time) []resources.Tweet {
+	utcStartTime := startTime.UTC()
+	utcEndTime := endTime.UTC()
+	
+	p := &tt.SearchTweetsRecentParams{
+		Query: query,
+		StartTime: &utcStartTime,
+		EndTime: &utcEndTime,
+		TweetFields: fields.TweetFieldList{
+			fields.TweetFieldText,
+			fields.TweetFieldCreatedAt,
 		},
 	}
 
