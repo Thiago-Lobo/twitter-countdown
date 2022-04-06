@@ -70,7 +70,7 @@ func run(client *twitter.TwitterClient, userId string, tweetTemplate string, tar
 		return false
 	}
 
-	ScheduleTask(taskClosure, 40 * time.Second, true)
+	ScheduleTask(taskClosure, 30 * time.Minute, true)
 
 }
 
