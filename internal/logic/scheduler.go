@@ -7,7 +7,6 @@ import (
 type fn func() bool
 
 func ScheduleTask(theTask fn, thresholdTime time.Time, period time.Duration, runAtStart bool) {
-	ticker := time.NewTicker(period)
 	done := make(chan bool)
 
 	taskClosure := func () {	
@@ -15,6 +14,8 @@ func ScheduleTask(theTask fn, thresholdTime time.Time, period time.Duration, run
 			done<-true
 		}
 	}
+	
+	ticker := time.NewTicker(period)
 
 	go func() {
 		if (runAtStart) {

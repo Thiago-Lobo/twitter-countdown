@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"time"
-	"twitter-countdown/pkg/twitter"
-	"twitter-countdown/internal/constants"
 	"twitter-countdown/internal/logic"
+	"twitter-countdown/internal/constants"
 )
 
 func init() {
@@ -15,27 +13,6 @@ func init() {
 
 func main() {
 
-	fmt.Println("Hello world!")
-	
-	fmt.Println(os.Args[1])
-	fmt.Println(fmt.Sprintf(os.Args[1], 240))
+	logic.Initialize(os.Getenv(constants.OAUTH_TOKEN), os.Getenv(constants.OAUTH_TOKEN_SECRET), os.Args[1], "2023-01-01", "23:40:00")
 
-	fmt.Println(logic.GetDaysToEvent("2023-01-01"))
-	fmt.Println(logic.GetDaysToEvent("2022-04-04"))
-	fmt.Println(logic.GetDaysToEvent("2022-04-05"))
-	fmt.Println(logic.GetDaysToEvent("2022-04-06"))
-
-	client := twitter.New(os.Getenv(constants.OAUTH_TOKEN), os.Getenv(constants.OAUTH_TOKEN_SECRET))
-	client.Initialize()
-	client.Test()
-
-	// client.PostTweet("posted from golang - works fine :)")
-	userId := client.LookupAuthenticatedUserInfo()
-	
-	query := logic.BuildQuery("posted from golang - works fine :)", userId)
-	fmt.Println(query)
-	tweets := client.LookupRecentTweets(query)
-
-	fmt.Printf("%d", len(tweets))
-	
 }
