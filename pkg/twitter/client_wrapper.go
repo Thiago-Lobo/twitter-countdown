@@ -9,8 +9,8 @@ import (
 	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/resources"
 	"github.com/michimani/gotwi/tweets"
-	tt "github.com/michimani/gotwi/tweets/types"
 	"github.com/michimani/gotwi/users"
+	tt "github.com/michimani/gotwi/tweets/types"
 	ut "github.com/michimani/gotwi/users/types"
 )
 

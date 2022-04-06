@@ -11,7 +11,7 @@ import (
 func run(client *twitter.TwitterClient, userId string, tweetTemplate string, targetDate string, postTime string) {
 
 	taskClosure := func () bool {
-		fmt.Println(">> Starting task!")
+		fmt.Println("\n>> Starting task!")
 		
 		remainingDays := GetDaysToEvent(targetDate)
 		fmt.Println("Remaining days: ", remainingDays)
@@ -79,8 +79,6 @@ func Initialize(oauthToken string, oauthTokenSecret string, tweetTemplate string
 	client := twitter.New(oauthToken, oauthTokenSecret)
 	client.Initialize()
 	client.Test()
-
-	fmt.Println()
 
 	userId := client.LookupAuthenticatedUserInfo()
 	
