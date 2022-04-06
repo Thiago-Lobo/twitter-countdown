@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   twitter-countdown:
+    restart: always
     build: .
     environment:
       GOTWI_API_KEY: ""
