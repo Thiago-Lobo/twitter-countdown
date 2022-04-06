@@ -118,6 +118,7 @@ func (tc *TwitterClient) LookupRecentTweets(query string) []resources.Tweet {
 
 }
 
+// TODO: figure out why this one doesn't work :(
 func (tc *TwitterClient) LookupRecentTweetsWithTimeRange(query string, startTime time.Time, endTime time.Time) []resources.Tweet {
 	utcStartTime := startTime.UTC()
 	utcEndTime := endTime.UTC()

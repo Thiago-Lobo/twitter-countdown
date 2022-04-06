@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  twitter-countdown:
+    build: .
+    environment:
+      GOTWI_API_KEY: ""
+      GOTWI_API_KEY_SECRET: ""
+      GOTWI_OAUTH_TOKEN: ""
+      GOTWI_OAUTH_TOKEN_SECRET: ""
+      END_DATE: "2023-01-01"
+      TWEET_TEMPLATE: "Bot test %d 🙏"
+      POST_TIME: "10:00:00"
