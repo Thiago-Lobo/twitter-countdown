@@ -33,9 +33,6 @@ func New(OAuthToken_ string, OAuthTokenSecret_ string) *TwitterClient {
 
 func (tc *TwitterClient) Initialize() {
 
-	fmt.Println(tc.OAuthToken)
-	fmt.Println(tc.OAuthTokenSecret)
-
 	in := &gotwi.NewGotwiClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 		OAuthToken:           tc.OAuthToken,
