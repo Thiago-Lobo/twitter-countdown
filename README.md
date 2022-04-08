@@ -12,6 +12,7 @@ Have you ever wanted a tool that reminds your followers about when your a\*\*hol
 - A Twitter account with developer access ([here's some information on how to get that](https://developer.twitter.com/en/support/twitter-api/developer-account))
 - A project + app created within your Twitter account developer dashboard
   - You will need the app's **API key**, **API key secret**, **Access Token** and **Access Token Secret**
+  - Your app will need OAuth 1.0a to be enabled, and **App permissions** set to **Read and write** (don't forget this one!)
 ## Setup
 
 1. Clone the repo
