@@ -2,21 +2,23 @@ package logic
 
 import (
 	"fmt"
-	"time"
 	"strings"
+	"time"
+	"twitter-countdown/internal/constants"
 	"twitter-countdown/pkg/twitter"
+
 	"github.com/michimani/gotwi/resources"
 )
 
-func run(client *twitter.TwitterClient, userId string, tweetTemplate string, targetDate string, postTime string) {
+func run(client *twitter.TwitterClient, userId string, tweetTemplate string, targetDate string, postTime string, tweetReplySetting constants.TweetReplySetting) {
 
-	taskClosure := func () bool {
+	taskClosure := func() bool {
 		fmt.Println("\n>> Starting task!")
-		
+
 		remainingDays := GetDaysToEvent(targetDate)
 		fmt.Println("Remaining days: ", remainingDays)
-		
-		if (remainingDays <= 0) {
+
+		if remainingDays <= 0 {
 			return true
 		}
 
@@ -27,10 +29,10 @@ func run(client *twitter.TwitterClient, userId string, tweetTemplate string, tar
 		fmt.Println("Current time: ", currentTime)
 		fmt.Println("Post time: ", postTime)
 
-		if (currentTime.After(postTime)) {
+		if currentTime.After(postTime) {
 			tweetTemplateForQuery := strings.Replace(tweetTemplate, "%d", "", -1)
 			fmt.Println("Tweet template for query: ", tweetTemplateForQuery)
-			
+
 			queryStartTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 0, 0, 0, 0, currentTime.Location())
 			queryEndTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 23, 59, 59, 999999999, currentTime.Location())
 			fmt.Println("Query startTime: ", queryStartTime)
@@ -38,28 +40,28 @@ func run(client *twitter.TwitterClient, userId string, tweetTemplate string, tar
 
 			query := BuildQuery(tweetTemplateForQuery, userId)
 			fmt.Println("Query: ", query)
-			
+
 			tweets := client.LookupRecentTweets(query)
 			fmt.Println("Found tweets: ", len(tweets))
-			
+
 			validTweets := []resources.Tweet{}
-			
+
 			for _, tweet := range tweets {
 				fmt.Println(*tweet.Text)
 				fmt.Println(tweet.CreatedAt)
-				
+
 				if tweet.CreatedAt.After(queryStartTime.UTC()) && tweet.CreatedAt.Before(queryEndTime.UTC()) {
 					validTweets = append(validTweets, tweet)
 				}
 			}
-			
+
 			fmt.Println("Found tweets after date filtering: ", len(validTweets))
-			
-			if (len(validTweets) == 0) {
+
+			if len(validTweets) == 0 {
 				formattedTweet := fmt.Sprintf(tweetTemplate, remainingDays)
 				fmt.Println("Formatted tweet: ", formattedTweet)
 				fmt.Println("Will tweet!")
-				client.PostTweet(formattedTweet)
+				client.PostTweet(formattedTweet, tweetReplySetting)
 			} else {
 				fmt.Println("Won't tweet because already tweeted!")
 			}
@@ -70,20 +72,18 @@ func run(client *twitter.TwitterClient, userId string, tweetTemplate string, tar
 		return false
 	}
 
-	ScheduleTask(taskClosure, 30 * time.Minute, true)
+	ScheduleTask(taskClosure, 30*time.Minute, true)
 
 }
 
-func Initialize(oauthToken string, oauthTokenSecret string, tweetTemplate string, targetDate string, postTime string) {
-	
+func Initialize(oauthToken string, oauthTokenSecret string, tweetTemplate string, targetDate string, postTime string, tweetReplySetting constants.TweetReplySetting) {
+
 	client := twitter.New(oauthToken, oauthTokenSecret)
 	client.Initialize()
 	client.Test()
 
 	userId := client.LookupAuthenticatedUserInfo()
-	
-	run(client, userId, tweetTemplate, targetDate, postTime)
+
+	run(client, userId, tweetTemplate, targetDate, postTime, tweetReplySetting)
 
 }
-
-

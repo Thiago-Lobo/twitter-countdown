@@ -4,20 +4,21 @@ import (
 	"context"
 	"fmt"
 	"time"
+	"twitter-countdown/internal/constants"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/resources"
 	"github.com/michimani/gotwi/tweets"
-	"github.com/michimani/gotwi/users"
 	tt "github.com/michimani/gotwi/tweets/types"
+	"github.com/michimani/gotwi/users"
 	ut "github.com/michimani/gotwi/users/types"
 )
 
 type TwitterClient struct {
-	OAuthToken 			string
-	OAuthTokenSecret 	string
-	Client				*gotwi.GotwiClient
+	OAuthToken       string
+	OAuthTokenSecret string
+	Client           *gotwi.GotwiClient
 }
 
 // Constructor
@@ -46,7 +47,7 @@ func (tc *TwitterClient) Initialize() {
 	}
 
 	tc.Client = c
-	
+
 }
 
 func (tc *TwitterClient) Test() {
@@ -55,7 +56,6 @@ func (tc *TwitterClient) Test() {
 		Username: "elonmusk",
 	}
 
-	
 	res, err := users.UserLookupByUsername(context.Background(), tc.Client, p)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -66,9 +66,11 @@ func (tc *TwitterClient) Test() {
 
 }
 
-func (tc *TwitterClient) PostTweet(text string) {
+func (tc *TwitterClient) PostTweet(text string, tweetReplySetting constants.TweetReplySetting) {
+
 	p := &tt.ManageTweetsPostParams{
-		Text: gotwi.String(text),
+		Text:          gotwi.String(text),
+		ReplySettings: tweetReplySetting.String(),
 	}
 
 	res, err := tweets.ManageTweetsPost(context.Background(), tc.Client, p)
@@ -81,7 +83,7 @@ func (tc *TwitterClient) PostTweet(text string) {
 }
 
 func (tc *TwitterClient) LookupAuthenticatedUserInfo() string {
-	
+
 	p := &ut.UserLookupMeParams{}
 
 	res, err := users.UserLookupMe(context.Background(), tc.Client, p)
@@ -91,12 +93,12 @@ func (tc *TwitterClient) LookupAuthenticatedUserInfo() string {
 	}
 
 	fmt.Printf("Authenticated user's ID is [%s]\n", gotwi.StringValue(res.Data.ID))
-	
+
 	return *res.Data.ID
 }
 
 func (tc *TwitterClient) LookupRecentTweets(query string) []resources.Tweet {
-	
+
 	p := &tt.SearchTweetsRecentParams{
 		Query: query,
 		TweetFields: fields.TweetFieldList{
@@ -119,11 +121,11 @@ func (tc *TwitterClient) LookupRecentTweets(query string) []resources.Tweet {
 func (tc *TwitterClient) LookupRecentTweetsWithTimeRange(query string, startTime time.Time, endTime time.Time) []resources.Tweet {
 	utcStartTime := startTime.UTC()
 	utcEndTime := endTime.UTC()
-	
+
 	p := &tt.SearchTweetsRecentParams{
-		Query: query,
+		Query:     query,
 		StartTime: &utcStartTime,
-		EndTime: &utcEndTime,
+		EndTime:   &utcEndTime,
 		TweetFields: fields.TweetFieldList{
 			fields.TweetFieldText,
 			fields.TweetFieldCreatedAt,

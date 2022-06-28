@@ -18,7 +18,7 @@ func getEnvVarOrDie(name string) string {
 
 	if result == "" {
 		fmt.Printf("Please provide the environment variable \"%s\"\n", name)
-		os.Exit(1)	
+		os.Exit(1)
 	}
 
 	return result
@@ -31,11 +31,12 @@ func main() {
 	getEnvVarOrDie(constants.GOTWI_API_KEY_SECRET)
 
 	logic.Initialize(
-		getEnvVarOrDie(constants.OAUTH_TOKEN), 
-		getEnvVarOrDie(constants.OAUTH_TOKEN_SECRET), 
-		getEnvVarOrDie(constants.TWEET_TEMPLATE), 
-		getEnvVarOrDie(constants.END_DATE), 
+		getEnvVarOrDie(constants.OAUTH_TOKEN),
+		getEnvVarOrDie(constants.OAUTH_TOKEN_SECRET),
+		getEnvVarOrDie(constants.TWEET_TEMPLATE),
+		getEnvVarOrDie(constants.END_DATE),
 		getEnvVarOrDie(constants.POST_TIME),
+		constants.StringToTweetReplySetting(os.Getenv(constants.REPLY_SETTING)),
 	)
 
 }
